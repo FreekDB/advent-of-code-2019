@@ -1,5 +1,7 @@
 package com.github.freekdb.aoc2019
 
+import java.io.File
+
 private const val DIRECTION_UP = 'U'
 private const val DIRECTION_DOWN = 'D'
 private const val DIRECTION_LEFT = 'L'
@@ -10,29 +12,22 @@ private const val DIRECTION_RIGHT = 'R'
 
 // https://adventofcode.com/2019/day/3
 fun main(arguments: Array<String>) {
-    val inputPath = if (arguments.isEmpty()) "actual-input.txt" else arguments[0]
+    val inputPath = if (arguments.isEmpty()) "input/day-03--actual-input.txt" else arguments[0]
     val crossingDistance = findCrossingDistance(inputPath)
     println("Crossing distance for input file $inputPath: $crossingDistance")
 }
 
 private fun findCrossingDistance(inputPath: String): Int {
-    val inputLines = readInput(inputPath)
+    val inputLines =
+        File(inputPath)
+            .readLines()
+            .filter { it.isNotEmpty() }
+
     val path1 = parsePath(inputLines[0])
     val path2 = parsePath(inputLines[1])
     val intersections = path1.intersect(path2)
 
     return solvePart1(intersections)
-}
-
-private fun readInput(inputPath: String): List<String> {
-    return object{}
-        .javaClass
-        .classLoader
-        .getResource(inputPath)
-        ?.readText()
-        ?.split("\n")
-        ?.filter { it.isNotEmpty() }
-        ?: throw IllegalArgumentException("Cannot read from input file $inputPath")
 }
 
 private fun parsePath(path: String): List<Point2D> {
