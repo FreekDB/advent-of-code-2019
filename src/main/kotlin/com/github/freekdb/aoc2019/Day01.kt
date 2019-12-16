@@ -13,9 +13,8 @@ fun main() {
 }
 
 private fun requiredFuel(mass: Int): Int =
-    generateSequence(requiredFuelExclusive(mass)) {
-        val additionalFuel = requiredFuelExclusive(it)
-        if (additionalFuel > 0) additionalFuel else null
+    generateSequence(requiredFuelExclusive(mass)) { fuel ->
+        requiredFuelExclusive(fuel).let { if (it > 0) it else null }
     }.sum()
 
 private fun requiredFuelExclusive(mass: Int): Int =
