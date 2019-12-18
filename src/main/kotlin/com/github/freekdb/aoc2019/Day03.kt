@@ -13,11 +13,10 @@ private const val DIRECTION_RIGHT = 'R'
 // https://adventofcode.com/2019/day/3
 fun main(arguments: Array<String>) {
     val inputPath = if (arguments.isEmpty()) "input/day-03--input.txt" else arguments[0]
-    val crossingDistance = findCrossingDistance(inputPath)
-    println("Crossing distance for input file $inputPath: $crossingDistance")
+    findCrossingDistance(inputPath)
 }
 
-private fun findCrossingDistance(inputPath: String): Int {
+private fun findCrossingDistance(inputPath: String) {
     val inputLines =
         File(inputPath)
             .readLines()
@@ -27,7 +26,11 @@ private fun findCrossingDistance(inputPath: String): Int {
     val path2 = parsePath(inputLines[1])
     val intersections = path1.intersect(path2)
 
-    return solvePart1(intersections)
+    val crossingDistance = solvePart1(intersections)
+    println("Crossing distance: $crossingDistance")
+
+    val combinedSteps = solvePart2(intersections, path1, path2)
+    println("Combined steps: $combinedSteps")
 }
 
 private fun parsePath(path: String): List<Point2D> {
@@ -56,4 +59,7 @@ private fun parsePath(path: String): List<Point2D> {
 }
 
 private fun solvePart1(intersections: Set<Point2D>): Int =
-    intersections.map { it.distanceTo(Point2D.ORIGIN) }.min()!!
+    intersections.map { it.distanceTo(Point2D.ORIGIN) }.min() ?: -1
+
+private fun solvePart2(intersections: Set<Point2D>, path1: List<Point2D>, path2: List<Point2D>): Int =
+    intersections.map { 2 + path1.indexOf(it) + path2.indexOf(it) }.min() ?: -1
