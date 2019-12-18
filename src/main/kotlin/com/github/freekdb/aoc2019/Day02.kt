@@ -34,7 +34,7 @@ private fun runProgram(initialState: List<Int>): List<Int> {
         if (opcode == OPCODE_PLUS || opcode == OPCODE_TIMES) {
             val operand1 = memory[memory[instructionPointer + 1]]
             val operand2 = memory[memory[instructionPointer + 2]]
-            val result = if (opcode == 1) operand1 + operand2 else operand1 * operand2
+            val result = if (opcode == OPCODE_PLUS) operand1 + operand2 else operand1 * operand2
             memory[memory[instructionPointer + 3]] = result
         }
 
