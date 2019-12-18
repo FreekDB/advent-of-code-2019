@@ -16,7 +16,7 @@ fun main() {
 
 private fun requiredFuel(mass: Int): Int =
     generateSequence(requiredFuelExclusive(mass)) { fuel ->
-        requiredFuelExclusive(fuel).let { if (it > 0) it else null }
+        requiredFuelExclusive(fuel).takeIf { it > 0 }
     }.sum()
 
 @Suppress("unused")
