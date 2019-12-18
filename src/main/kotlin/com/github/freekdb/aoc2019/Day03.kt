@@ -12,7 +12,7 @@ private const val DIRECTION_RIGHT = 'R'
 
 // https://adventofcode.com/2019/day/3
 fun main(arguments: Array<String>) {
-    val inputPath = if (arguments.isEmpty()) "input/day-03--actual-input.txt" else arguments[0]
+    val inputPath = if (arguments.isEmpty()) "input/day-03--input.txt" else arguments[0]
     val crossingDistance = findCrossingDistance(inputPath)
     println("Crossing distance for input file $inputPath: $crossingDistance")
 }
