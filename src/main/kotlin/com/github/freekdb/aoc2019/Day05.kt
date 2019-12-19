@@ -13,7 +13,7 @@ private const val OPCODE_EQUALS = 8
 private const val OPCODE_HALT = 99
 
 private const val PARAMETER_MODE_POSITION = 0
-private const val PARAMETER_MODE_IMMEDIATE = 1
+// private const val PARAMETER_MODE_IMMEDIATE = 1
 
 // https://adventofcode.com/2019/day/5
 fun main() {
