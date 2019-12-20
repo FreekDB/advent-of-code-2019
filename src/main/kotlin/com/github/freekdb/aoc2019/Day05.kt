@@ -18,9 +18,8 @@ private const val PARAMETER_MODE_POSITION = 0
 // https://adventofcode.com/2019/day/5
 fun main() {
     val diagnosticProgram = File("input/day-05--input.txt")
-        .readLines()
-        .filter { it.isNotEmpty() }
-        .flatMap { it.split(",") }
+        .readLines()[0]
+        .split(",")
         .map { it.toInt() }
 
     runProgram(diagnosticProgram)
