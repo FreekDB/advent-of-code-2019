@@ -1,9 +1,7 @@
 package com.github.freekdb.aoc2019
 
 import java.io.File
-
-private const val PARAMETER_MODE_POSITION = 0
-// private const val PARAMETER_MODE_IMMEDIATE = 1
+import kotlin.math.max
 
 // https://adventofcode.com/2019/day/7
 fun main() {
@@ -12,34 +10,32 @@ fun main() {
         .split(",")
         .map { it.toInt() }
 
-    permute(listOf(0, 1, 2, 3, 4)).forEach {
-        println(it)
-    }
-    println()
+    var highestSignal = Int.MIN_VALUE
+    listOf(0, 1, 2, 3, 4).permutations().forEach { phaseSettings ->
+        val output = mutableListOf(0)
 
-    val amplifier = IntcodeComputer(amplifierControllerSoftware)
-    amplifier.runProgram()
-    println(amplifier.memory[0])
+        phaseSettings.forEach {
+            val input = listOf(it, output.first())
+            output.clear()
+
+            val amplifier = IntcodeComputer(amplifierControllerSoftware, input, output)
+            amplifier.runProgram()
+
+            highestSignal = max(highestSignal, output[0])
+        }
+    }
+
+    println("Highest signal: $highestSignal")
 }
 
-// Adapted from https://rosettacode.org/wiki/Permutations#Kotlin
-fun <T> permute(input: List<T>): List<List<T>> {
-    return if (input.size > 1) {
-        val permutations = mutableListOf<List<T>>()
-
-        val elementToInsert = input.first()
-        for (subPermutation in permute(input.drop(1))) {
-            for (insertIndex in 0..subPermutation.size) {
-                val newPermutation = subPermutation.toMutableList()
-                newPermutation.add(insertIndex, elementToInsert)
-                permutations.add(newPermutation)
-            }
+// Thanks to Jesse for this elegant permutations function!
+fun <T> List<T>.permutations(): List<List<T>> {
+    return if (this.size <= 1)
+        listOf(this)
+    else
+        this.flatMap { item ->
+            this.minus(item).permutations().map { subPermutation -> subPermutation + item }
         }
-
-        permutations
-    } else {
-        listOf(input)
-    }
 }
 
 
@@ -61,8 +57,13 @@ enum class Opcode(val value: Int, val instructionLength: Int = 0) {
 }
 
 
-class IntcodeComputer(initialState: List<Int>) {
-    val memory = initialState.toMutableList()
+private const val PARAMETER_MODE_POSITION = 0
+// private const val PARAMETER_MODE_IMMEDIATE = 1
+
+
+class IntcodeComputer(initialState: List<Int>, private val input: List<Int>, private val output: MutableList<Int>) {
+    private val memory = initialState.toMutableList()
+    private var inputIndex = 0
 
     fun runProgram() {
         var instructionPointer = 0
@@ -106,16 +107,18 @@ class IntcodeComputer(initialState: List<Int>) {
     }
 
     private fun readValueFromInput(instructionPointer: Int) {
-        print("Please enter input value: ")
-        val value = readLine()?.toInt() ?: 0
+        val value = input[inputIndex]
+        inputIndex++
 
         setValue(instructionPointer + 1, value)
+        // println("Input value: $value")
     }
 
     private fun printValueToOutput(instructionHeader: Int, instructionPointer: Int) {
         val value = getValue(instructionPointer + 1, (instructionHeader / 100) % 10)
 
-        println("Output value: $value")
+        output.add(value)
+        // println("Output value: $value")
     }
 
     private fun jumpIfTrue(instructionHeader: Int, instructionPointer: Int): Int {
