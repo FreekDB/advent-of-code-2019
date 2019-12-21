@@ -1,7 +1,6 @@
 package com.github.freekdb.aoc2019
 
 import java.io.File
-import kotlin.math.max
 
 // https://adventofcode.com/2019/day/7
 fun main() {
@@ -10,20 +9,23 @@ fun main() {
         .split(",")
         .map { it.toInt() }
 
-    var highestSignal = Int.MIN_VALUE
-    listOf(0, 1, 2, 3, 4).permutations().forEach { phaseSettings ->
-        val output = mutableListOf(0)
+    val highestSignal =
+        listOf(0, 1, 2, 3, 4)
+            .permutations()
+            .map { phaseSettings ->
+                val output = mutableListOf(0)
 
-        phaseSettings.forEach {
-            val input = listOf(it, output.first())
-            output.clear()
+                phaseSettings.forEach { inputSetting ->
+                    val input = listOf(inputSetting, output.first())
+                    output.clear()
 
-            val amplifier = IntcodeComputer(amplifierControllerSoftware, input, output)
-            amplifier.runProgram()
+                    val amplifier = IntcodeComputer(amplifierControllerSoftware, input, output)
+                    amplifier.runProgram()
+                }
 
-            highestSignal = max(highestSignal, output[0])
-        }
-    }
+                output[0]
+            }
+            .max()
 
     println("Highest signal: $highestSignal")
 }
