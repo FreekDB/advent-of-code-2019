@@ -1,3 +1,6 @@
+// Gradle build script in Kotlin for Advent of Code project.
+// https://github.com/FreekDB/advent-of-code-2019
+
 group = "nl.xs4all.home.freekdb.aoc"
 version = "1.0-SNAPSHOT"
 
