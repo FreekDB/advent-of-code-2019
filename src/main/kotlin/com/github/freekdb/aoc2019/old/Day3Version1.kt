@@ -1,3 +1,6 @@
+package com.github.freekdb.aoc2019.old
+
+import java.io.File
 import kotlin.experimental.or
 import kotlin.math.abs
 import kotlin.math.max
@@ -13,7 +16,7 @@ private const val DIRECTION_RIGHT = 'R'
 
 // https://adventofcode.com/2019/day/3
 fun main(arguments: Array<String>) {
-    val inputPath = if (arguments.isEmpty()) "actual-input.txt" else arguments[0]
+    val inputPath = if (arguments.isEmpty()) "input/day-03--input.txt" else arguments[0]
     val crossingDistance = findCrossingDistance(inputPath)
     println("Crossing distance for input file $inputPath: $crossingDistance")
 }
@@ -25,7 +28,14 @@ private fun findCrossingDistance(inputPath: String): Int {
         val path1 = inputLines[0]
         val path2 = inputLines[1]
 
-        val grid = Grid(mergeDimensions(calculateDimensions(path1), calculateDimensions(path2)))
+        val grid = Grid(
+            mergeDimensions(
+                calculateDimensions(
+                    path1
+                ),
+                calculateDimensions(path2)
+            )
+        )
 
         grid.registerPath(path1, NUMBER_PATH_1)
         grid.registerPath(path2, NUMBER_PATH_2)
@@ -37,11 +47,8 @@ private fun findCrossingDistance(inputPath: String): Int {
 }
 
 private fun readInput(inputPath: String): List<String> {
-    return object{}.
-        javaClass
-        .getResource(inputPath)
-        .readText()
-        .split("\n")
+    return File(inputPath)
+        .readLines()
         .filter { it.isNotEmpty() }
 }
 
@@ -61,7 +68,10 @@ private fun calculateDimensions(path: String): Dimensions {
             val distance = it.substring(1).toInt()
 
             rowIndex += calculateVerticalDistance(direction, distance)
-            columnIndex += calculateHorizontalDistance(direction, distance)
+            columnIndex += calculateHorizontalDistance(
+                direction,
+                distance
+            )
 
             minimumRowIndex = min(minimumRowIndex, rowIndex)
             maximumRowIndex = max(maximumRowIndex, rowIndex)
@@ -69,7 +79,12 @@ private fun calculateDimensions(path: String): Dimensions {
             maximumColumnIndex = max(maximumColumnIndex, columnIndex)
         }
 
-    return Dimensions(minimumRowIndex, maximumRowIndex, minimumColumnIndex, maximumColumnIndex)
+    return Dimensions(
+        minimumRowIndex,
+        maximumRowIndex,
+        minimumColumnIndex,
+        maximumColumnIndex
+    )
 }
 
 private fun calculateVerticalDistance(direction: Char, distance: Int): Int {
@@ -121,8 +136,10 @@ class Grid(dimensions: Dimensions) {
             .forEach {
                 val direction = it[0]
                 val distance = it.substring(1).toInt()
-                val verticalDistance = calculateVerticalDistance(direction, distance)
-                val horizontalDistance = calculateHorizontalDistance(direction, distance)
+                val verticalDistance =
+                    calculateVerticalDistance(direction, distance)
+                val horizontalDistance =
+                    calculateHorizontalDistance(direction, distance)
 
                 markCells(rowIndex, columnIndex, verticalDistance, horizontalDistance, number)
 
