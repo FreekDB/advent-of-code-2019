@@ -1,4 +1,4 @@
-// Gradle build script in Kotlin for Advent of Code project.
+// Gradle build script (written in Kotlin) for yet another Advent of Code project.
 // https://github.com/FreekDB/advent-of-code-2019
 
 group = "nl.xs4all.home.freekdb.aoc"
@@ -14,6 +14,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
 }
 
 tasks {
